@@ -1,0 +1,6 @@
+@ChambaYa_Solucion_HostAddress = http://localhost:5222
+
+GET {{ChambaYa_Solucion_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
