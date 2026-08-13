@@ -1,4 +1,4 @@
-﻿namespace ChambaYa_Solucion.Models
+﻿namespace ChambaYa_API.Models
 {
     public class Categoria
     {

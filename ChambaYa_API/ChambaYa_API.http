@@ -1,0 +1,6 @@
+@ChambaYa_API_HostAddress = http://localhost:5222
+
+GET {{ChambaYa_API_HostAddress}}/api/Chamba/Ofertas
+Accept: application/json
+
+###

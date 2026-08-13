@@ -1,8 +1,8 @@
-﻿using ChambaYa_Solucion.Models;
-using ChambaYa_Solucion.Services;
+﻿using ChambaYa_API.Models;
+using ChambaYa_API.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ChambaYa_Solucion.Controllers
+namespace ChambaYa_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -43,22 +43,10 @@ namespace ChambaYa_Solucion.Controllers
         {
             try
             {
-                using (var cn = new Microsoft.Data.SqlClient.SqlConnection("Server=localhost\\SQLEXPRESS;Database=BD_ChambaYa;Trusted_Connection=True;TrustServerCertificate=True;"))
-                {
-                    var cmd = new Microsoft.Data.SqlClient.SqlCommand("sp_insertar_oferta", cn);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@IdCategoria", oferta.IdCategoria);
-                    cmd.Parameters.AddWithValue("@Titulo", oferta.Titulo);
-                    cmd.Parameters.AddWithValue("@Descripcion", oferta.Descripcion);
-                    cmd.Parameters.AddWithValue("@Salario", oferta.Salario);
-                    cmd.Parameters.AddWithValue("@Ubicacion", oferta.Ubicacion);
-                    cmd.Parameters.AddWithValue("@Modalidad", oferta.Modalidad);
-                    cmd.Parameters.AddWithValue("@Requisitos", oferta.Requisitos);
-
-                    cn.Open();
-                    cmd.ExecuteNonQuery();
+                bool resultado = _service.CrearOferta(oferta);
+                if (resultado)
                     return Ok(new ApiResponse<object> { Success = true, Message = "Oferta Creada" });
-                }
+                return StatusCode(500, new ApiResponse<object> { Success = false, Message = "Error al crear la oferta" });
             }
             catch (Exception ex)
             {

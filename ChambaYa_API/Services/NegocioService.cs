@@ -1,13 +1,14 @@
-﻿using ChambaYa_Solucion.Models;
+﻿using ChambaYa_API.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace ChambaYa_Solucion.Services
+namespace ChambaYa_API.Services
 {
     public interface INegocioService
     {
         List<Oferta> ListarOfertasActivas();
         bool ProcesarCarritoPostulacion(PostulacionCarrito carrito);
+        bool CrearOferta(Oferta oferta);
     }
 
     public class NegocioService : INegocioService
@@ -73,6 +74,32 @@ namespace ChambaYa_Solucion.Services
                 }
             }
             return exito;
+        }
+
+        public bool CrearOferta(Oferta oferta)
+        {
+            using (SqlConnection cn = new SqlConnection(_cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("sp_insertar_oferta", cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdCategoria", oferta.IdCategoria);
+                    cmd.Parameters.AddWithValue("@Titulo", oferta.Titulo);
+                    cmd.Parameters.AddWithValue("@Descripcion", oferta.Descripcion);
+                    cmd.Parameters.AddWithValue("@Salario", oferta.Salario);
+                    cmd.Parameters.AddWithValue("@Ubicacion", oferta.Ubicacion);
+                    cmd.Parameters.AddWithValue("@Modalidad", oferta.Modalidad);
+                    cmd.Parameters.AddWithValue("@Requisitos", oferta.Requisitos);
+
+                    cn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
         }
     }
 }
