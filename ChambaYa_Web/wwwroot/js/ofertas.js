@@ -29,9 +29,14 @@
 
     const formateaTiempo = (fecha) => {
         const f = new Date(fecha);
-        const diff = Math.floor((new Date() - f) / (1000 * 60 * 60 * 24));
+        const hoy = new Date();
+        // Reset times to compare just dates
+        f.setHours(0,0,0,0);
+        hoy.setHours(0,0,0,0);
+        const diff = Math.floor((hoy - f) / (1000 * 60 * 60 * 24));
         if (diff === 0) return 'Hoy';
         if (diff === 1) return 'Ayer';
+        if (diff < 0) return 'Próximamente'; // For future dates like 2026
         return `Hace ${diff} días`;
     };
 
