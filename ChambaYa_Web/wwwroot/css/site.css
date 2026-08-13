@@ -1,0 +1,144 @@
+:root {
+    --chamba-primary: #0d6efd;
+    --chamba-dark: #0b1d33;
+    --chamba-accent: #ffc107;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+    color: #212529;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.chamba-navbar {
+    background: linear-gradient(90deg, var(--chamba-dark) 0%, #123a6b 100%);
+}
+
+.chamba-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.chamba-navbar .nav-link:hover {
+    color: var(--chamba-accent);
+}
+
+.chamba-footer {
+    background-color: var(--chamba-dark);
+    flex-shrink: 0;
+}
+
+.chamba-hero {
+    background: linear-gradient(120deg, var(--chamba-dark) 0%, #1d4e8f 100%);
+    color: #fff;
+    border-radius: 1rem;
+}
+
+.oferta-card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(11, 29, 51, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.oferta-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(11, 29, 51, 0.15);
+}
+
+.oferta-card .card-title {
+    font-weight: 700;
+    color: var(--chamba-dark);
+}
+
+.badge-categoria {
+    background-color: #e7f0ff;
+    color: var(--chamba-primary);
+    font-weight: 600;
+}
+
+.oferta-card.seleccionada {
+    border: 2px solid var(--chamba-primary);
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+.salario-texto {
+    color: #198754;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.btn-seleccionar.seleccionado {
+    background-color: var(--chamba-primary);
+    border-color: var(--chamba-primary);
+    color: #fff;
+}
+
+.chamba-carrito-flotante {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 1050;
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(90deg, var(--chamba-dark) 0%, #123a6b 100%);
+    color: #fff;
+    border: none;
+    border-radius: 3rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(11, 29, 51, 0.35);
+    transition: transform 0.2s ease;
+}
+
+.chamba-carrito-flotante:hover {
+    transform: scale(1.04);
+    color: #fff;
+}
+
+.chamba-carrito-flotante .contador-carrito {
+    background-color: var(--chamba-accent);
+    color: #000;
+    border-radius: 50%;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.btn-chamba {
+    background: linear-gradient(90deg, var(--chamba-dark) 0%, #123a6b 100%);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+}
+
+.btn-chamba:hover {
+    color: var(--chamba-accent);
+}
+
+.estado-vacio {
+    color: #6c757d;
+}
+
+@media (max-width: 576px) {
+    .chamba-hero h1 {
+        font-size: 1.6rem;
+    }
+}

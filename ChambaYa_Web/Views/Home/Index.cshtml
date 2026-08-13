@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Ofertas de Trabajo";
+}
+
+<section class="chamba-hero p-4 p-md-5 mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="fw-bold mb-2"><i class="bi bi-lightning-charge-fill text-warning"></i> Encuentra tu próxima chamba</h1>
+            <p class="mb-0 opacity-75">Explora ofertas de trabajo temporal, selecciona las que te interesen y postúlate en un solo clic.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <i class="bi bi-briefcase-fill display-1 opacity-50"></i>
+        </div>
+    </div>
+</section>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-8">
+        <div class="input-group input-group-lg shadow-sm">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input type="text" id="buscarOferta" class="form-control" placeholder="Buscar por título, ubicación o requisitos..." />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <select id="filtroModalidad" class="form-select form-select-lg shadow-sm">
+            <option value="">Todas las modalidades</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Remoto">Remoto</option>
+            <option value="Híbrido">Híbrido</option>
+            <option value="Medio tiempo">Medio tiempo</option>
+            <option value="Tiempo completo">Tiempo completo</option>
+        </select>
+    </div>
+</div>
+
+<div id="contenedorOfertas" class="row g-4">
+    <div class="col-12 text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Cargando ofertas...</p>
+    </div>
+</div>
+
+<div id="sinResultados" class="text-center d-none py-5">
+    <i class="bi bi-inbox display-3 estado-vacio"></i>
+    <h4 class="mt-3">No se encontraron ofertas</h4>
+    <p class="estado-vacio">Intenta con otros términos de búsqueda o modalidad.</p>
+</div>
+
+<button type="button" id="btnCarritoFlotante" class="chamba-carrito-flotante">
+    <i class="bi bi-bag-check-fill fs-4"></i>
+    <span>Postular a <span id="contadorCarrito" class="contador-carrito">0</span></span>
+</button>
+
+@section Scripts {
+    <script src="~/js/ofertas.js" asp-append-version="true"></script>
+}

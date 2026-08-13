@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Publicar Oferta";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="fw-bold mb-1"><i class="bi bi-plus-circle me-2 text-primary"></i>Publicar nueva oferta</h2>
+                <p class="text-muted mb-4">Completa la información de la oferta de trabajo. Se publicará de inmediato para todos los postulantes.</p>
+
+                <form id="formCrearOferta" novalidate>
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label fw-semibold">Título de la oferta *</label>
+                        <input type="text" class="form-control" id="titulo" maxlength="150" placeholder="Ej: Repartidor de comida rápida" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="idCategoria" class="form-label fw-semibold">Categoría *</label>
+                            <select class="form-select" id="idCategoria" required>
+                                <option value="" selected disabled>Seleccione una categoría</option>
+                                <option value="1">Tecnología</option>
+                                <option value="2">Ventas</option>
+                                <option value="3">Atención al Cliente</option>
+                                <option value="4">Diseño</option>
+                                <option value="5">Administración</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modalidad" class="form-label fw-semibold">Modalidad *</label>
+                            <select class="form-select" id="modalidad" required>
+                                <option value="" selected disabled>Seleccione la modalidad</option>
+                                <option value="Presencial">Presencial</option>
+                                <option value="Remoto">Remoto</option>
+                                <option value="Híbrido">Híbrido</option>
+                                <option value="Medio tiempo">Medio tiempo</option>
+                                <option value="Tiempo completo">Tiempo completo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="salario" class="form-label fw-semibold">Salario (S/) *</label>
+                            <input type="number" class="form-control" id="salario" min="1" step="0.01" placeholder="Ej: 1200" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="ubicacion" class="form-label fw-semibold">Ubicación *</label>
+                            <input type="text" class="form-control" id="ubicacion" maxlength="150" placeholder="Ej: Lima - San Isidro" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label fw-semibold">Descripción *</label>
+                        <textarea class="form-control" id="descripcion" rows="4" placeholder="Describe las actividades a realizar..." required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="requisitos" class="form-label fw-semibold">Requisitos *</label>
+                        <textarea class="form-control" id="requisitos" rows="3" placeholder="Ej: Experiencia mínima de 6 meses, disponibilidad inmediata..." required></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-chamba btn-lg flex-fill" id="btnGuardar">
+                            <i class="bi bi-send me-1"></i>Publicar oferta
+                        </button>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/oferta-crear.js" asp-append-version="true"></script>
+}
