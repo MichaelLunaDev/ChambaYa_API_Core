@@ -1,120 +1,86 @@
 @{
-    ViewData["Title"] = "Ofertas de Trabajo";
+    ViewData["Title"] = "Encuentra Trabajo";
 }
 
-<section class="chamba-hero mb-4">
-    <div class="position-relative">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7">
-                <span class="hero-badge"><i class="bi bi-lightning-charge-fill"></i>Bolsa de trabajo temporal</span>
-                <h1 class="hero-titulo">Encuentra tu <span class="text-gradient">próxima chamba</span></h1>
-                <p class="hero-subtitulo">Explora ofertas reales de trabajo, selecciona las que te interesen y postúlate en un solo clic, sin intermediarios.</p>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-num">+20</span>
-                        <span class="stat-label">Ofertas activas</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-num">5</span>
-                        <span class="stat-label">Categorías</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-num">100%</span>
-                        <span class="stat-label">Gratis</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-5 d-none d-lg-block">
-                <div class="hero-ilustracion">
-                    <i class="bi bi-briefcase-fill"></i>
-                </div>
-            </div>
+<section class="hero-section">
+    <div class="container">
+        <div class="badge-soft mb-3">
+            <i class="bi bi-stars"></i> La nueva forma de trabajar
         </div>
+        
+        <h1 class="hero-title">
+            Tu próxima chamba,<br class="d-none d-md-block" />
+            <span class="text-gradient">a un clic de distancia</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+            Explora cientos de oportunidades laborales temporales. Sin intermediarios, sin complicaciones. Postúlate hoy mismo y empieza a generar ingresos.
+        </p>
 
-        <div class="hero-buscador mt-4">
-            <div class="input-group input-group-lg">
-                <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input type="text" id="buscarOferta" class="form-control" placeholder="Buscar por título, ubicación o requisitos..." />
-                <select id="filtroModalidad" class="form-select" aria-label="Filtrar por modalidad">
-                    <option value="">Todas las modalidades</option>
-                    <option value="Presencial">Presencial</option>
-                    <option value="Remoto">Remoto</option>
-                    <option value="Híbrido">Híbrido</option>
-                    <option value="Medio tiempo">Medio tiempo</option>
-                    <option value="Tiempo completo">Tiempo completo</option>
-                </select>
-            </div>
+        <div class="search-glass mb-5">
+            <i class="bi bi-search ms-3 text-slate-400 fs-5 d-none d-md-block"></i>
+            <input type="text" id="buscarOferta" class="form-control" placeholder="Cargo, empresa o habilidad..." />
+            <div class="vr-divider d-none d-md-block"></div>
+            <select id="filtroModalidad" class="form-select w-auto">
+                <option value="">Cualquier modalidad</option>
+                <option value="Presencial">Presencial</option>
+                <option value="Remoto">Remoto</option>
+                <option value="Híbrido">Híbrido</option>
+                <option value="Medio tiempo">Medio tiempo</option>
+                <option value="Tiempo completo">Tiempo completo</option>
+            </select>
+            <button class="btn-primary-modern ms-2 d-none d-md-block" style="min-width:120px;">Buscar</button>
         </div>
     </div>
 </section>
 
-<div class="d-flex align-items-center justify-content-between mb-3 seccion-titulo">
-    <h2 class="h4 mb-0"><i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>Ofertas de trabajo</h2>
-    <span class="contador-ofertas" id="contadorOfertas">Cargando...</span>
-</div>
+<div class="container">
+    <div class="d-flex align-items-end justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Ofertas destacadas</h3>
+            <p class="text-slate-500 small mb-0">Basado en las habilidades más demandadas</p>
+        </div>
+        <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-2 border" id="contadorOfertas">
+            Cargando...
+        </span>
+    </div>
 
-<div id="contenedorOfertas" class="row g-4">
-    <div class="col-md-6 col-lg-4">
-        <div class="skeleton-card">
-            <div class="d-flex gap-3">
-                <div class="skeleton" style="width: 52px; height: 52px; border-radius: 0.9rem;"></div>
-                <div class="flex-grow-1">
-                    <div class="skeleton mb-2" style="height: 16px; width: 80%;"></div>
-                    <div class="skeleton mb-3" style="height: 12px; width: 55%;"></div>
+    <div id="contenedorOfertas" class="row g-4">
+        <!-- Skeleton Loaders -->
+        @for(int i=0; i<3; i++) {
+        <div class="col-md-6 col-lg-4">
+            <div class="modern-card">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="d-flex gap-3">
+                        <div class="skeleton" style="width: 48px; height: 48px; border-radius: 12px;"></div>
+                        <div>
+                            <div class="skeleton mb-2" style="height: 16px; width: 120px;"></div>
+                            <div class="skeleton" style="height: 12px; width: 80px;"></div>
+                        </div>
+                    </div>
                 </div>
+                <div class="skeleton mb-2" style="height: 12px; width: 100%;"></div>
+                <div class="skeleton mb-4" style="height: 12px; width: 80%;"></div>
+                <div class="skeleton" style="height: 44px; border-radius: 12px;"></div>
             </div>
-            <div class="skeleton mb-2" style="height: 12px;"></div>
-            <div class="skeleton mb-2" style="height: 12px; width: 90%;"></div>
-            <div class="skeleton mb-3" style="height: 12px; width: 65%;"></div>
-            <div class="skeleton" style="height: 40px;"></div>
         </div>
+        }
     </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="skeleton-card">
-            <div class="d-flex gap-3">
-                <div class="skeleton" style="width: 52px; height: 52px; border-radius: 0.9rem;"></div>
-                <div class="flex-grow-1">
-                    <div class="skeleton mb-2" style="height: 16px; width: 75%;"></div>
-                    <div class="skeleton mb-3" style="height: 12px; width: 50%;"></div>
-                </div>
-            </div>
-            <div class="skeleton mb-2" style="height: 12px;"></div>
-            <div class="skeleton mb-2" style="height: 12px; width: 85%;"></div>
-            <div class="skeleton mb-3" style="height: 12px; width: 60%;"></div>
-            <div class="skeleton" style="height: 40px;"></div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="skeleton-card">
-            <div class="d-flex gap-3">
-                <div class="skeleton" style="width: 52px; height: 52px; border-radius: 0.9rem;"></div>
-                <div class="flex-grow-1">
-                    <div class="skeleton mb-2" style="height: 16px; width: 70%;"></div>
-                    <div class="skeleton mb-3" style="height: 12px; width: 45%;"></div>
-                </div>
-            </div>
-            <div class="skeleton mb-2" style="height: 12px;"></div>
-            <div class="skeleton mb-2" style="height: 12px; width: 88%;"></div>
-            <div class="skeleton mb-3" style="height: 12px; width: 55%;"></div>
-            <div class="skeleton" style="height: 40px;"></div>
-        </div>
-    </div>
-</div>
 
-<div id="sinResultados" class="text-center d-none py-5">
-    <div class="estado-vacio-icono">
-        <i class="bi bi-search"></i>
+    <div id="sinResultados" class="text-center d-none py-5 my-5">
+        <i class="bi bi-search empty-icon"></i>
+        <h4 class="fw-bold text-slate-900">No encontramos resultados</h4>
+        <p class="text-slate-500">Intenta buscando con otras palabras clave o cambia los filtros.</p>
+        <button class="btn btn-light rounded-pill px-4 fw-semibold mt-2" onclick="limpiarFiltros()">
+            Limpiar filtros
+        </button>
     </div>
-    <h4 class="mt-3 fw-bold">No se encontraron ofertas</h4>
-    <p class="text-muted">Intenta con otros términos de búsqueda o cambia la modalidad.</p>
-    <button type="button" class="btn btn-outline-chamba mt-1" onclick="limpiarFiltros()">
-        <i class="bi bi-x-circle me-1"></i>Limpiar filtros
-    </button>
 </div>
 
 <button type="button" id="btnCarritoFlotante" class="chamba-carrito-flotante">
-    <i class="bi bi-bag-check-fill fs-4"></i>
-    <span>Postular a <span id="contadorCarrito" class="contador-carrito">0</span></span>
+    <span class="contador-badge" id="contadorCarrito">0</span>
+    <span>Postular a selección</span>
+    <i class="bi bi-arrow-right"></i>
 </button>
 
 @section Scripts {

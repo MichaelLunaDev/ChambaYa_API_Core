@@ -2,72 +2,82 @@
     ViewData["Title"] = "Publicar Oferta";
 }
 
-<div class="row justify-content-center">
+<div class="row justify-content-center" style="margin-top: 2rem;">
     <div class="col-lg-8">
-        <div class="panel-formulario overflow-hidden">
-            <div class="cabecera-formulario p-4 p-md-5 pb-4">
-                <span class="form-badge"><i class="bi bi-megaphone"></i>Publicación</span>
-                <h2 class="fw-bold mb-1">Publica tu oferta <span class="text-gradient">gratis</span></h2>
-                <p class="text-muted mb-0">Completa la información del puesto. Se publicará de inmediato para todos los postulantes.</p>
+        <div class="form-panel">
+            <div class="form-header p-4 p-md-5 text-center">
+                <div class="bg-indigo-50 text-indigo-600 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:56px;height:56px;font-size:1.5rem; background: var(--indigo-50); color: var(--indigo-600);">
+                    <i class="bi bi-rocket-takeoff"></i>
+                </div>
+                <h2 class="fw-bold mb-2">Publica una nueva oferta</h2>
+                <p class="text-slate-500 mb-0">Encuentra al candidato ideal hoy mismo.</p>
             </div>
 
-            <form id="formCrearOferta" class="p-4 p-md-5 pt-4" novalidate>
-                <div class="mb-3">
-                    <label for="titulo" class="form-label"><i class="bi bi-briefcase me-1 text-primary"></i>Título de la oferta *</label>
-                    <input type="text" class="form-control" id="titulo" maxlength="150" placeholder="Ej: Repartidor de comida rápida" required />
+            <form id="formCrearOferta" class="p-4 p-md-5" novalidate>
+                <div class="form-floating mb-4">
+                    <input type="text" class="form-control" id="titulo" maxlength="150" placeholder="Título" required />
+                    <label for="titulo" class="text-slate-500">Título de la oferta</label>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="idCategoria" class="form-label"><i class="bi bi-tags me-1 text-primary"></i>Categoría *</label>
-                        <select class="form-select" id="idCategoria" required>
-                            <option value="" selected disabled>Seleccione una categoría</option>
-                            <option value="1">Tecnología</option>
-                            <option value="2">Ventas</option>
-                            <option value="3">Atención al Cliente</option>
-                            <option value="4">Diseño</option>
-                            <option value="5">Administración</option>
-                        </select>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select" id="idCategoria" required>
+                                <option value="" selected disabled>Seleccione una</option>
+                                <option value="1">Tecnología</option>
+                                <option value="2">Ventas</option>
+                                <option value="3">Atención al Cliente</option>
+                                <option value="4">Diseño</option>
+                                <option value="5">Administración</option>
+                            </select>
+                            <label for="idCategoria" class="text-slate-500">Categoría</label>
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="modalidad" class="form-label"><i class="bi bi-clock me-1 text-primary"></i>Modalidad *</label>
-                        <select class="form-select" id="modalidad" required>
-                            <option value="" selected disabled>Seleccione la modalidad</option>
-                            <option value="Presencial">Presencial</option>
-                            <option value="Remoto">Remoto</option>
-                            <option value="Híbrido">Híbrido</option>
-                            <option value="Medio tiempo">Medio tiempo</option>
-                            <option value="Tiempo completo">Tiempo completo</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="salario" class="form-label"><i class="bi bi-cash-coin me-1 text-primary"></i>Salario (S/) *</label>
-                        <input type="number" class="form-control" id="salario" min="1" step="0.01" placeholder="Ej: 1200" required />
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="ubicacion" class="form-label"><i class="bi bi-geo-alt me-1 text-primary"></i>Ubicación *</label>
-                        <input type="text" class="form-control" id="ubicacion" maxlength="150" placeholder="Ej: Lima - San Isidro" required />
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select" id="modalidad" required>
+                                <option value="" selected disabled>Seleccione una</option>
+                                <option value="Presencial">Presencial</option>
+                                <option value="Remoto">Remoto</option>
+                                <option value="Híbrido">Híbrido</option>
+                                <option value="Medio tiempo">Medio tiempo</option>
+                                <option value="Tiempo completo">Tiempo completo</option>
+                            </select>
+                            <label for="modalidad" class="text-slate-500">Modalidad</label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="descripcion" class="form-label"><i class="bi bi-card-text me-1 text-primary"></i>Descripción *</label>
-                    <textarea class="form-control" id="descripcion" rows="4" placeholder="Describe las actividades a realizar..." required></textarea>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="salario" min="1" step="0.01" placeholder="Salario" required />
+                            <label for="salario" class="text-slate-500">Salario (S/)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="ubicacion" maxlength="150" placeholder="Ubicación" required />
+                            <label for="ubicacion" class="text-slate-500">Ciudad o Ubicación</label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="requisitos" class="form-label"><i class="bi bi-check2-square me-1 text-primary"></i>Requisitos *</label>
-                    <textarea class="form-control" id="requisitos" rows="3" placeholder="Ej: Experiencia mínima de 6 meses, disponibilidad inmediata..." required></textarea>
+                <div class="form-floating mb-4">
+                    <textarea class="form-control" id="descripcion" style="height: 120px" placeholder="Descripción" required></textarea>
+                    <label for="descripcion" class="text-slate-500">Descripción del puesto</label>
                 </div>
 
-                <div class="d-flex flex-column flex-sm-row gap-2">
-                    <button type="submit" class="btn btn-chamba btn-lg flex-fill" id="btnGuardar">
-                        <i class="bi bi-send me-1"></i>Publicar oferta
+                <div class="form-floating mb-5">
+                    <textarea class="form-control" id="requisitos" style="height: 100px" placeholder="Requisitos" required></textarea>
+                    <label for="requisitos" class="text-slate-500">Requisitos mínimos</label>
+                </div>
+
+                <div class="d-flex flex-column flex-sm-row gap-3 pt-3 border-top border-slate-200">
+                    <button type="submit" class="btn btn-primary-modern flex-fill py-3" id="btnGuardar">
+                        <i class="bi bi-send me-2"></i>Publicar oferta
                     </button>
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancelar</a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-light rounded-pill fw-semibold py-3 px-4 text-slate-600">Cancelar</a>
                 </div>
             </form>
         </div>

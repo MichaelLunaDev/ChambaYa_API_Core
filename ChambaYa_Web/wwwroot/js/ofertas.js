@@ -11,58 +11,59 @@
     const contadorOfertas = document.getElementById('contadorOfertas');
 
     const iconosCategoria = {
-        'tecnología': 'bi-cpu',
+        'tecnología': 'bi-code-slash',
         'ventas': 'bi-graph-up-arrow',
         'atención al cliente': 'bi-headset',
-        'diseño': 'bi-palette',
+        'diseño': 'bi-vector-pen',
         'administración': 'bi-briefcase'
     };
 
     const iconoCategoria = (nombre) => {
         const clave = (nombre || '').toLowerCase();
-        return iconosCategoria[clave] || 'bi-tag';
-    };
-
-    const modalidadIcono = (modalidad) => {
-        const m = (modalidad || '').toLowerCase();
-        if (m.includes('remoto')) return 'bi-house-check';
-        if (m.includes('hibrido') || m.includes('híbrido')) return 'bi-arrow-left-right';
-        if (m.includes('medio')) return 'bi-clock';
-        if (m.includes('completo') || m.includes('full')) return 'bi-hourglass-split';
-        return 'bi-geo-alt';
+        return iconosCategoria[clave] || 'bi-star';
     };
 
     const formatearSalario = (valor) => {
         return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN', maximumFractionDigits: 0 }).format(valor);
     };
 
+    const formateaTiempo = (fecha) => {
+        const f = new Date(fecha);
+        const diff = Math.floor((new Date() - f) / (1000 * 60 * 60 * 24));
+        if (diff === 0) return 'Hoy';
+        if (diff === 1) return 'Ayer';
+        return `Hace ${diff} días`;
+    };
+
     const tarjetaOferta = (oferta, indice) => {
         const seleccionada = seleccionadas.has(oferta.idOferta);
         return `
             <div class="col-md-6 col-lg-4">
-                <div class="card oferta-card position-relative h-100 animar-entrada ${seleccionada ? 'seleccionada' : ''}" data-id="${oferta.idOferta}" style="animation-delay: ${Math.min(indice * 60, 480)}ms">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="avatar-categoria"><i class="bi ${iconoCategoria(oferta.nombreCategoria)}"></i></div>
-                            <div class="flex-grow-1 overflow-hidden">
-                                <span class="badge badge-categoria mb-1">${escapeHtml(oferta.nombreCategoria)}</span>
-                                <h5 class="card-title text-truncate" title="${escapeHtml(oferta.titulo)}">${escapeHtml(oferta.titulo)}</h5>
+                <div class="modern-card h-100 d-flex flex-column animar-entrada ${seleccionada ? 'seleccionada' : ''}" data-id="${oferta.idOferta}" style="animation-delay: ${Math.min(indice * 50, 400)}ms">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="icon-box">
+                                <i class="bi ${iconoCategoria(oferta.nombreCategoria)}"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title-modern text-truncate" style="max-width:180px;" title="${escapeHtml(oferta.titulo)}">${escapeHtml(oferta.titulo)}</h5>
+                                <span class="card-meta">${escapeHtml(oferta.nombreCategoria)} • ${formateaTiempo(oferta.fechaPublicacion)}</span>
                             </div>
                         </div>
-                        <p class="card-text flex-grow-1">${escapeHtml(recortar(oferta.descripcion, 130))}</p>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="chip-oferta"><i class="bi ${modalidadIcono(oferta.modalidad)}"></i>${escapeHtml(oferta.modalidad)}</span>
-                            <span class="chip-oferta"><i class="bi bi-geo-alt"></i>${escapeHtml(oferta.ubicacion)}</span>
-                            <span class="chip-oferta"><i class="bi bi-calendar3"></i>${new Date(oferta.fechaPublicacion).toLocaleDateString('es-PE')}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <p class="salario-texto mb-0"><i class="bi bi-cash-coin me-1"></i>${formatearSalario(oferta.salario)}</p>
-                            <button type="button" class="btn btn-seleccionar btn-sm px-3 ${seleccionada ? 'seleccionado' : ''}" data-id="${oferta.idOferta}">
-                                <i class="bi ${seleccionada ? 'bi-check-circle-fill' : 'bi-plus-circle'} me-1"></i>
-                                ${seleccionada ? 'Seleccionada' : 'Seleccionar'}
-                            </button>
-                        </div>
+                        <div class="salary-tag">${formatearSalario(oferta.salario)}</div>
                     </div>
+                    
+                    <p class="text-slate-500 small mb-4 flex-grow-1">${escapeHtml(recortar(oferta.descripcion, 110))}</p>
+                    
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <span class="tag-chip"><i class="bi bi-geo-alt text-slate-400"></i> ${escapeHtml(oferta.ubicacion)}</span>
+                        <span class="tag-chip"><i class="bi bi-laptop text-slate-400"></i> ${escapeHtml(oferta.modalidad)}</span>
+                    </div>
+                    
+                    <button type="button" class="btn btn-seleccionar ${seleccionada ? 'seleccionado' : ''}" data-id="${oferta.idOferta}">
+                        <i class="bi ${seleccionada ? 'bi-check2' : 'bi-plus-lg'} me-1"></i>
+                        ${seleccionada ? 'Seleccionada' : 'Seleccionar'}
+                    </button>
                 </div>
             </div>`;
     };
@@ -94,7 +95,7 @@
         });
 
         if (contadorOfertas) {
-            contadorOfertas.textContent = filtradas.length + ' oferta' + (filtradas.length === 1 ? '' : 's');
+            contadorOfertas.innerHTML = `<i class="bi bi-briefcase me-1"></i> ${filtradas.length} oferta${filtradas.length === 1 ? '' : 's'}`;
         }
 
         if (filtradas.length === 0) {
@@ -131,25 +132,29 @@
         if (seleccionadas.size === 0) return;
 
         const ofertasSeleccionadas = ofertas.filter(o => seleccionadas.has(o.idOferta));
-        const resumen = ofertasSeleccionadas.map(o => `<li>${escapeHtml(o.titulo)}</li>`).join('');
+        const resumen = ofertasSeleccionadas.map(o => `<li class="mb-1 text-slate-700">${escapeHtml(o.titulo)}</li>`).join('');
 
         const { isConfirmed } = await Swal.fire({
-            icon: 'question',
-            title: 'Confirmar postulación',
-            html: `<p class="mb-2">Vas a postularte a las siguientes ofertas:</p><ul class="text-start">${resumen}</ul>`,
-            confirmButtonText: 'Sí, postularme',
-            cancelButtonText: 'Cancelar',
+            title: '¿Confirmar postulación?',
+            html: `<p class="mb-3 text-slate-500">Enviarás tu perfil a las siguientes ofertas:</p><ul class="text-start ps-4">${resumen}</ul>`,
             showCancelButton: true,
-            confirmButtonColor: '#2563eb',
-            reverseButtons: true
+            confirmButtonText: 'Enviar postulación',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'btn btn-primary-modern rounded-pill px-4 py-2',
+                cancelButton: 'btn btn-light rounded-pill px-4 py-2 text-slate-600',
+                popup: 'rounded-4 border-0 shadow-lg'
+            },
+            buttonsStyling: false
         });
 
         if (!isConfirmed) return;
 
         try {
             Swal.fire({
-                title: 'Procesando...',
-                text: 'Registrando tus postulaciones',
+                title: 'Enviando...',
+                text: 'Procesando tu solicitud',
                 allowOutsideClick: false,
                 didOpen: () => Swal.showLoading()
             });
@@ -163,14 +168,21 @@
             });
 
             if (resp.success) {
-                await ChambaYa.alertaExito('¡Postulación exitosa!', resp.message);
+                await Swal.fire({
+                    icon: 'success',
+                    title: '¡Postulación enviada!',
+                    text: 'Las empresas revisarán tu perfil pronto.',
+                    confirmButtonText: 'Genial',
+                    customClass: { confirmButton: 'btn btn-primary-modern rounded-pill px-4', popup: 'rounded-4' },
+                    buttonsStyling: false
+                });
                 seleccionadas.clear();
                 actualizarCarrito();
             } else {
-                await ChambaYa.alertaError(resp.message || 'No se pudo procesar la postulación.');
+                await ChambaYa.alertaError(resp.message || 'Error al procesar la postulación.');
             }
         } catch (error) {
-            await ChambaYa.alertaError('No se pudo conectar con el servidor. Inténtalo nuevamente.');
+            await ChambaYa.alertaError('Error de conexión. Inténtalo nuevamente.');
         }
     };
 
@@ -196,15 +208,14 @@
                 ofertas = resp.data || [];
                 renderizar();
             } else {
-                contenedor.innerHTML = '<div class="col-12 text-center py-5"><p class="text-danger">' + escapeHtml(resp.message) + '</p></div>';
+                contenedor.innerHTML = '<div class="col-12 text-center py-5 text-danger">' + escapeHtml(resp.message) + '</div>';
             }
         } catch (error) {
             contenedor.innerHTML = `
                 <div class="col-12 text-center py-5">
-                    <div class="estado-vacio-icono"><i class="bi bi-wifi-off"></i></div>
-                    <h4 class="mt-3 fw-bold">No se pudo conectar con el servidor</h4>
-                    <p class="text-muted">Verifica que la API esté disponible e intenta nuevamente.</p>
-                    <button class="btn btn-chamba mt-2" onclick="location.reload()"><i class="bi bi-arrow-clockwise me-1"></i>Reintentar</button>
+                    <i class="bi bi-wifi-off empty-icon"></i>
+                    <h4 class="fw-bold text-slate-900">Sin conexión</h4>
+                    <button class="btn btn-light rounded-pill mt-3" onclick="location.reload()">Reintentar</button>
                 </div>`;
         }
     };

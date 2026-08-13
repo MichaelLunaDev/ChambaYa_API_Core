@@ -2,23 +2,19 @@
     ViewData["Title"] = "Mis Postulaciones";
 }
 
-<div class="text-center py-5">
-    <div class="panel-formulario overflow-hidden mx-auto" style="max-width: 560px;">
-        <div class="cabecera-formulario p-5 pb-4">
-            <div class="estado-vacio-icono mb-3">
-                <i class="bi bi-send"></i>
+<div class="text-center py-5 my-5">
+    <div class="mx-auto" style="max-width: 500px;">
+        <div class="mb-4">
+            <div class="bg-indigo-50 text-indigo-600 rounded-circle d-inline-flex align-items-center justify-content-center" style="width:80px;height:80px;font-size:2.5rem; background: var(--indigo-50); color: var(--indigo-600);">
+                <i class="bi bi-inbox"></i>
             </div>
-            <h2 class="fw-bold mb-1">Mis postulaciones</h2>
-            <p class="text-muted mb-0">El seguimiento de tus postulaciones en un solo lugar</p>
         </div>
-        <div class="p-5 pt-4">
-            <p class="text-muted mb-4">
-                Aquí podrás ver el estado, la oferta y las fechas de todas tus postulaciones.
-                Esta sección estará disponible próximamente.
-            </p>
-            <a asp-controller="Home" asp-action="Index" class="btn btn-chamba px-4">
-                <i class="bi bi-briefcase me-1"></i>Explorar ofertas
-            </a>
-        </div>
+        <h2 class="fw-bold mb-3 text-slate-900">Aún no hay nada por aquí</h2>
+        <p class="text-slate-500 mb-5 lh-lg">
+            El módulo de seguimiento de postulaciones está en desarrollo. Pronto podrás ver el estado de todas tus aplicaciones en un solo lugar.
+        </p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary-modern">
+            <i class="bi bi-search me-1"></i> Explorar ofertas ahora
+        </a>
     </div>
 </div>
