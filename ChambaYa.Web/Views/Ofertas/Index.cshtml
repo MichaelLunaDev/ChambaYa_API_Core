@@ -1,0 +1,33 @@
+﻿@model List<ChambaYa.Web.Models.OfertaModel>
+
+<h2>Ofertas</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">+ Nueva Oferta</a>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Categoría</th>
+            <th>Salario</th>
+            <th>Ubicación</th>
+            <th>Modalidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.Titulo</td>
+                <td>@o.NombreCategoria</td>
+                <td>@o.Salario.ToString("C")</td>
+                <td>@o.Ubicacion</td>
+                <td>@o.Modalidad</td>
+            </tr>
+        }
+    </tbody>
+</table>
