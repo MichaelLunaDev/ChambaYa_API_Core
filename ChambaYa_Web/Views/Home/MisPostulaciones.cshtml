@@ -3,15 +3,20 @@
 }
 
 <div class="text-center py-5">
-    <div class="card shadow-sm border-0 rounded-4 mx-auto" style="max-width: 560px;">
-        <div class="card-body p-5">
-            <i class="bi bi-send display-1 text-primary opacity-75"></i>
-            <h2 class="fw-bold mt-3 mb-2">Mis postulaciones</h2>
+    <div class="panel-formulario overflow-hidden mx-auto" style="max-width: 560px;">
+        <div class="cabecera-formulario p-5 pb-4">
+            <div class="estado-vacio-icono mb-3">
+                <i class="bi bi-send"></i>
+            </div>
+            <h2 class="fw-bold mb-1">Mis postulaciones</h2>
+            <p class="text-muted mb-0">El seguimiento de tus postulaciones en un solo lugar</p>
+        </div>
+        <div class="p-5 pt-4">
             <p class="text-muted mb-4">
-                Aquí podrás ver el seguimiento de todas tus postulaciones: estado, oferta y fechas.
+                Aquí podrás ver el estado, la oferta y las fechas de todas tus postulaciones.
                 Esta sección estará disponible próximamente.
             </p>
-            <a asp-controller="Home" asp-action="Index" class="btn btn-chamba">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-chamba px-4">
                 <i class="bi bi-briefcase me-1"></i>Explorar ofertas
             </a>
         </div>
