@@ -1,4 +1,4 @@
-﻿using ChambaYa_API.Models;
+using ChambaYa_API.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -9,6 +9,7 @@ namespace ChambaYa_API.Services
         List<Oferta> ListarOfertasActivas();
         bool ProcesarCarritoPostulacion(PostulacionCarrito carrito);
         bool CrearOferta(Oferta oferta);
+        List<Categoria> ListarCategorias();
     }
 
     public class NegocioService : INegocioService
@@ -100,6 +101,65 @@ namespace ChambaYa_API.Services
                     return false;
                 }
             }
+        }
+        public List<Categoria> ListarCategorias()
+        {
+            var lista = new List<Categoria>();
+            using (SqlConnection cn = new SqlConnection(_cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SELECT IdCategoria, NombreCategoria FROM Categorias", cn);
+                    cmd.CommandType = CommandType.Text;
+                    cn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Categoria
+                            {
+                                IdCategoria = dr.GetInt32(0),
+                                NombreCategoria = dr.GetString(1)
+                            });
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    try 
+                    {
+                        SqlCommand cmd = new SqlCommand("SELECT IdCategoria, NombreCategoria FROM Categoria", cn);
+                        cmd.CommandType = CommandType.Text;
+                        if (cn.State != ConnectionState.Open) cn.Open();
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                lista.Add(new Categoria
+                                {
+                                    IdCategoria = dr.GetInt32(0),
+                                    NombreCategoria = dr.GetString(1)
+                                });
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+            
+            if (lista.Count == 0)
+            {
+                var ofertas = ListarOfertasActivas();
+                lista = ofertas.Select(o => o.NombreCategoria)
+                               .Where(n => !string.IsNullOrEmpty(n))
+                               .Distinct()
+                               .Select((n, i) => new Categoria { IdCategoria = i + 1, NombreCategoria = n })
+                               .ToList();
+            }
+            
+            return lista;
         }
     }
 }

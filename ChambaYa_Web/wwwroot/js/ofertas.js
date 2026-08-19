@@ -1,11 +1,23 @@
 (() => {
     let ofertas = [];
     let seleccionadas = new Set();
+    
+    let paginaActual = 1;
+    const itemsPorPagina = 6;
+    let ofertasFiltradas = [];
 
     const contenedor = document.getElementById('contenedorOfertas');
     const sinResultados = document.getElementById('sinResultados');
     const inputBuscar = document.getElementById('buscarOferta');
     const selectModalidad = document.getElementById('filtroModalidad');
+    const selectCategoria = document.getElementById('filtroCategoria');
+    const inputSalario = document.getElementById('filtroSalario');
+    const selectOrdenamiento = document.getElementById('ordenamientoOfertas');
+    
+    const navPaginacion = document.getElementById('navPaginacion');
+    const ulPaginacion = document.getElementById('ulPaginacion');
+    const tablaReporteBody = document.querySelector('#tablaReporte tbody');
+
     const btnCarrito = document.getElementById('btnCarritoFlotante');
     const contador = document.getElementById('contadorCarrito');
     const contadorOfertas = document.getElementById('contadorOfertas');
@@ -30,13 +42,12 @@
     const formateaTiempo = (fecha) => {
         const f = new Date(fecha);
         const hoy = new Date();
-        // Reset times to compare just dates
         f.setHours(0,0,0,0);
         hoy.setHours(0,0,0,0);
         const diff = Math.floor((hoy - f) / (1000 * 60 * 60 * 24));
         if (diff === 0) return 'Hoy';
         if (diff === 1) return 'Ayer';
-        if (diff < 0) return 'Próximamente'; // For future dates like 2026
+        if (diff < 0) return 'Próximamente';
         return `Hace ${diff} días`;
     };
 
@@ -84,33 +95,160 @@
         return texto.length > max ? texto.substring(0, max) + '...' : texto;
     };
 
-    const renderizar = () => {
+    const aplicarFiltrosYOrdenamiento = () => {
         const termino = inputBuscar.value.trim().toLowerCase();
         const modalidad = selectModalidad.value;
+        const categoria = selectCategoria.value;
+        const salarioMinimo = parseFloat(inputSalario.value) || 0;
+        const orden = selectOrdenamiento.value;
 
-        const filtradas = ofertas.filter(o => {
+        ofertasFiltradas = ofertas.filter(o => {
             const coincideTexto = !termino ||
                 o.titulo.toLowerCase().includes(termino) ||
                 o.ubicacion.toLowerCase().includes(termino) ||
                 o.descripcion.toLowerCase().includes(termino) ||
                 o.requisitos.toLowerCase().includes(termino) ||
                 o.nombreCategoria.toLowerCase().includes(termino);
+            
             const coincideModalidad = !modalidad || o.modalidad === modalidad;
-            return coincideTexto && coincideModalidad;
+            const coincideCategoria = !categoria || o.idCategoria.toString() === categoria;
+            const coincideSalario = o.salario >= salarioMinimo;
+
+            return coincideTexto && coincideModalidad && coincideCategoria && coincideSalario;
         });
 
+        ofertasFiltradas.sort((a, b) => {
+            if (orden === 'salario_desc') return b.salario - a.salario;
+            if (orden === 'salario_asc') return a.salario - b.salario;
+            if (orden === 'antiguas') return new Date(a.fechaPublicacion) - new Date(b.fechaPublicacion);
+            return new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion);
+        });
+
+        paginaActual = 1; 
+        actualizarReporte();
+        renderizarPagina();
+    };
+
+    const renderizarPagina = () => {
         if (contadorOfertas) {
-            contadorOfertas.innerHTML = `<i class="bi bi-briefcase me-1"></i> ${filtradas.length} oferta${filtradas.length === 1 ? '' : 's'}`;
+            contadorOfertas.innerHTML = `<i class="bi bi-briefcase me-1"></i> ${ofertasFiltradas.length} oferta${ofertasFiltradas.length === 1 ? '' : 's'}`;
         }
 
-        if (filtradas.length === 0) {
+        if (ofertasFiltradas.length === 0) {
             contenedor.innerHTML = '';
             sinResultados.classList.remove('d-none');
+            navPaginacion.classList.add('d-none');
             return;
         }
 
         sinResultados.classList.add('d-none');
-        contenedor.innerHTML = filtradas.map(tarjetaOferta).join('');
+        
+        const totalPaginas = Math.ceil(ofertasFiltradas.length / itemsPorPagina);
+        const inicio = (paginaActual - 1) * itemsPorPagina;
+        const fin = inicio + itemsPorPagina;
+        const ofertasPagina = ofertasFiltradas.slice(inicio, fin);
+
+        contenedor.innerHTML = ofertasPagina.map((o, i) => tarjetaOferta(o, i)).join('');
+        
+        renderizarControlesPaginacion(totalPaginas);
+    };
+
+    const renderizarControlesPaginacion = (total) => {
+        if (total <= 1) {
+            navPaginacion.classList.add('d-none');
+            return;
+        }
+        navPaginacion.classList.remove('d-none');
+        let html = '';
+        
+        html += `<li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${paginaActual - 1}">Anterior</a>
+                 </li>`;
+                 
+        for (let i = 1; i <= total; i++) {
+            html += `<li class="page-item ${paginaActual === i ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                     </li>`;
+        }
+        
+        html += `<li class="page-item ${paginaActual === total ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${paginaActual + 1}">Siguiente</a>
+                 </li>`;
+                 
+        ulPaginacion.innerHTML = html;
+    };
+
+    ulPaginacion.addEventListener('click', (e) => {
+        e.preventDefault();
+        const pageLink = e.target.closest('.page-link');
+        if (!pageLink) return;
+        
+        const parent = pageLink.parentElement;
+        if (parent.classList.contains('disabled') || parent.classList.contains('active')) return;
+        
+        paginaActual = parseInt(pageLink.dataset.page);
+        renderizarPagina();
+        document.getElementById('contenedorOfertas').scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+
+    const actualizarReporte = () => {
+        if(!tablaReporteBody) return;
+        tablaReporteBody.innerHTML = ofertasFiltradas.map(o => `
+            <tr>
+                <td>${o.idOferta}</td>
+                <td>${escapeHtml(o.titulo)}</td>
+                <td>${escapeHtml(o.nombreCategoria)}</td>
+                <td>${escapeHtml(o.modalidad)}</td>
+                <td>${escapeHtml(o.ubicacion)}</td>
+                <td>S/ ${o.salario.toFixed(2)}</td>
+                <td>${new Date(o.fechaPublicacion).toLocaleDateString()}</td>
+            </tr>
+        `).join('');
+    };
+
+    window.exportarExcel = () => {
+        if (ofertasFiltradas.length === 0) return ChambaYa.alertaError('No hay datos para exportar.');
+        
+        let csv = 'ID,Titulo,Categoria,Modalidad,Ubicacion,Salario,FechaPublicacion\n';
+        ofertasFiltradas.forEach(o => {
+            const tit = (o.titulo || '').replace(/"/g, '""');
+            const cat = (o.nombreCategoria || '').replace(/"/g, '""');
+            const ubi = (o.ubicacion || '').replace(/"/g, '""');
+            csv += `${o.idOferta},"${tit}","${cat}","${o.modalidad}","${ubi}",${o.salario},${new Date(o.fechaPublicacion).toLocaleDateString()}\n`;
+        });
+        
+        const blob = new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reporte_Ofertas.csv';
+        link.click();
+    };
+
+    window.exportarPDF = () => {
+        if (ofertasFiltradas.length === 0) return ChambaYa.alertaError('No hay datos para exportar.');
+        
+        const ventana = window.open('', '_blank');
+        ventana.document.write(`
+            <html>
+            <head>
+                <title>Reporte de Ofertas - ChambaYa</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h2 { color: #2563eb; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+                    th { background-color: #f8fafc; }
+                </style>
+            </head>
+            <body>
+                <h2>Reporte de Ofertas de Trabajo</h2>
+                <p>Generado el: ${new Date().toLocaleString()}</p>
+                <table>${document.getElementById('tablaReporte').innerHTML}</table>
+            </body>
+            </html>
+        `);
+        ventana.document.close();
+        setTimeout(() => { ventana.print(); }, 500);
     };
 
     const actualizarCarrito = () => {
@@ -124,7 +262,7 @@
         } else {
             btnCarrito.style.display = 'none';
         }
-        renderizar();
+        aplicarFiltrosYOrdenamiento();
     };
 
     const toggleSeleccion = (id) => {
@@ -196,14 +334,35 @@
         if (btn) toggleSeleccion(parseInt(btn.dataset.id, 10));
     });
 
-    inputBuscar.addEventListener('input', renderizar);
-    selectModalidad.addEventListener('change', renderizar);
-    btnCarrito.addEventListener('click', postular);
+    inputBuscar.addEventListener('input', aplicarFiltrosYOrdenamiento);
+    selectModalidad.addEventListener('change', aplicarFiltrosYOrdenamiento);
+    selectCategoria.addEventListener('change', aplicarFiltrosYOrdenamiento);
+    inputSalario.addEventListener('input', aplicarFiltrosYOrdenamiento);
+    selectOrdenamiento.addEventListener('change', aplicarFiltrosYOrdenamiento);
 
     window.limpiarFiltros = () => {
         inputBuscar.value = '';
         selectModalidad.value = '';
-        renderizar();
+        selectCategoria.value = '';
+        inputSalario.value = '';
+        selectOrdenamiento.value = 'recientes';
+        aplicarFiltrosYOrdenamiento();
+    };
+
+    const cargarCategorias = async () => {
+        try {
+            const resp = await ChambaYa.getJson(ChambaYa.apiBase + '/Categorias');
+            if (resp.success && selectCategoria) {
+                const cats = resp.data || [];
+                let html = '<option value="">Todas las categorías</option>';
+                cats.forEach(c => {
+                    html += `<option value="${c.idCategoria}">${escapeHtml(c.nombreCategoria)}</option>`;
+                });
+                selectCategoria.innerHTML = html;
+            }
+        } catch(e) {
+            console.error('Error cargando categorías', e);
+        }
     };
 
     const cargarOfertas = async () => {
@@ -211,7 +370,7 @@
             const resp = await ChambaYa.getJson(ChambaYa.apiBase + '/Ofertas');
             if (resp.success) {
                 ofertas = resp.data || [];
-                renderizar();
+                aplicarFiltrosYOrdenamiento();
             } else {
                 contenedor.innerHTML = '<div class="col-12 text-center py-5 text-danger">' + escapeHtml(resp.message) + '</div>';
             }
@@ -225,5 +384,6 @@
         }
     };
 
+    cargarCategorias();
     cargarOfertas();
 })();

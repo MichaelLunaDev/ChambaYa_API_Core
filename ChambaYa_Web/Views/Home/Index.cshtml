@@ -21,6 +21,11 @@
             <i class="bi bi-search ms-3 text-slate-400 fs-5 d-none d-lg-block"></i>
             <input type="text" id="buscarOferta" class="form-control" placeholder="Cargo, empresa o habilidad..." aria-label="Buscar oferta" />
             <div class="vr-divider"></div>
+            <div class="vr-divider d-none d-md-block"></div>
+            <select id="filtroCategoria" class="form-select w-auto" aria-label="Filtrar por categoría">
+                <option value="">Todas las categorías</option>
+            </select>
+            <div class="vr-divider d-none d-md-block"></div>
             <select id="filtroModalidad" class="form-select w-auto" aria-label="Filtrar por modalidad">
                 <option value="">Cualquier modalidad</option>
                 <option value="Presencial">Presencial</option>
@@ -29,20 +34,40 @@
                 <option value="Medio tiempo">Medio tiempo</option>
                 <option value="Tiempo completo">Tiempo completo</option>
             </select>
-            <button type="submit" class="btn-primary-modern ms-lg-2" style="min-width:120px;">Buscar</button>
+            <div class="vr-divider d-none d-md-block"></div>
+            <input type="number" id="filtroSalario" class="form-control w-auto" placeholder="Salario mín." aria-label="Salario mínimo" style="max-width: 130px;" />
+            <button type="submit" class="btn-primary-modern ms-lg-2" style="min-width:100px;">Buscar</button>
         </form>
     </div>
 </section>
 
 <div class="container">
-    <div class="d-flex align-items-end justify-content-between mb-4">
+    <div class="d-flex flex-wrap align-items-end justify-content-between mb-4 gap-3">
         <div>
-            <h3 class="fw-bold mb-1">Ofertas destacadas</h3>
-            <p class="text-slate-500 small mb-0">Basado en las habilidades más demandadas</p>
+            <h3 class="fw-bold mb-1">Ofertas disponibles</h3>
+            <p class="text-slate-500 small mb-0">Resultados de búsqueda y filtros combinados</p>
         </div>
-        <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-2 border" id="contadorOfertas">
-            Cargando...
-        </span>
+        <div class="d-flex align-items-center gap-3">
+            <select id="ordenamientoOfertas" class="form-select form-select-sm" style="width: auto;">
+                <option value="recientes">Más recientes primero</option>
+                <option value="antiguas">Más antiguas primero</option>
+                <option value="salario_desc">Mayor salario</option>
+                <option value="salario_asc">Menor salario</option>
+            </select>
+            
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportarExcel()" title="Exportar a Excel">
+                    <i class="bi bi-file-earmark-excel text-success"></i> Excel
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportarPDF()" title="Exportar a PDF">
+                    <i class="bi bi-file-earmark-pdf text-danger"></i> PDF
+                </button>
+            </div>
+            
+            <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-2 border" id="contadorOfertas">
+                Cargando...
+            </span>
+        </div>
     </div>
 
     <div id="contenedorOfertas" class="row g-4">
@@ -75,7 +100,27 @@
             Limpiar filtros
         </button>
     </div>
+
+    <nav aria-label="Paginación de ofertas" class="mt-5 d-none" id="navPaginacion">
+        <ul class="pagination justify-content-center" id="ulPaginacion">
+        </ul>
+    </nav>
 </div>
+
+<table id="tablaReporte" class="d-none">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Categoría</th>
+            <th>Modalidad</th>
+            <th>Ubicación</th>
+            <th>Salario</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
 <button type="button" id="btnCarritoFlotante" class="chamba-carrito-flotante">
     <span class="contador-badge" id="contadorCarrito">0</span>

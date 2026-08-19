@@ -1,4 +1,4 @@
-﻿using ChambaYa_API.Models;
+using ChambaYa_API.Models;
 using ChambaYa_API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +20,13 @@ namespace ChambaYa_API.Controllers
         {
             var lista = _service.ListarOfertasActivas();
             return Ok(new ApiResponse<List<Oferta>> { Success = true, Message = "Listado OK", Data = lista });
+        }
+
+        [HttpGet("Categorias")]
+        public IActionResult GetCategorias()
+        {
+            var lista = _service.ListarCategorias();
+            return Ok(new ApiResponse<List<Categoria>> { Success = true, Message = "Listado OK", Data = lista });
         }
 
         [HttpPost("ProcesarCarrito")]
