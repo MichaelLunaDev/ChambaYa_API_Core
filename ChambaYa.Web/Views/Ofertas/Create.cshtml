@@ -1,0 +1,51 @@
+﻿@model ChambaYa.Web.Models.OfertaModel
+
+<h2>Nueva Oferta</h2>
+
+@if (ViewBag.Debug != null)
+{
+    <div class="alert alert-danger">@ViewBag.Debug</div>
+}
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label>ID Categoría (Corrige michael xdddd))</label>
+        <input asp-for="IdCategoria" class="form-control" />
+        <span asp-validation-for="IdCategoria" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Título</label>
+        <input asp-for="Titulo" class="form-control" />
+        <span asp-validation-for="Titulo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Salario</label>
+        <input asp-for="Salario" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Ubicación</label>
+        <input asp-for="Ubicacion" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Modalidad</label>
+        <input asp-for="Modalidad" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Requisitos</label>
+        <textarea asp-for="Requisitos" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+</form>
