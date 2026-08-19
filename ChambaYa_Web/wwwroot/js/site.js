@@ -1,6 +1,6 @@
 const ChambaYa = {
-    apiBase: (window.ChambaYaApiBase || '') + '/api/Chamba',
-    usuarioId: 1,
+    apiBase: (window.ChambaYaApiBase || 'http://localhost:5222') + '/api/Chamba',
+    usuarioId: window.ChambaYaUsuarioId || null,
 
     async getJson(url, options = {}) {
         const resp = await fetch(url, {

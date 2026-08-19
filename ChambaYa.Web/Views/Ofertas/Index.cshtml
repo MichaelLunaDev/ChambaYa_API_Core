@@ -1,16 +1,41 @@
-﻿@model List<ChambaYa.Web.Models.OfertaModel>
+@model List<ChambaYa.Web.Models.OfertaModel>
 
 <h2>Ofertas</h2>
-<a asp-action="Create" class="btn btn-primary mb-3">+ Nueva Oferta</a>
+
+@if (User.IsInRole("Administrador"))
+{
+    <a asp-action="Create" class="btn btn-primary mb-3">+ Nueva Oferta</a>
+}
 
 @if (TempData["Mensaje"] != null)
 {
     <div class="alert alert-success">@TempData["Mensaje"]</div>
 }
 
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" name="buscar" class="form-control" placeholder="Buscar por título..." value="@ViewBag.Buscar">
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación" value="@ViewBag.Ubicacion">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-secondary">Filtrar</button>
+                <a asp-action="Index" class="btn btn-light">Limpiar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
 <table class="table table-striped">
     <thead>
         <tr>
+            @if (User.IsInRole("Postulante"))
+            {
+                <th>Sel.</th>
+            }
             <th>Título</th>
             <th>Categoría</th>
             <th>Salario</th>
@@ -22,6 +47,10 @@
         @foreach (var o in Model)
         {
             <tr>
+                @if (User.IsInRole("Postulante"))
+                {
+                    <td><input type="checkbox" class="oferta-checkbox form-check-input" value="@o.IdOferta" /></td>
+                }
                 <td>@o.Titulo</td>
                 <td>@o.NombreCategoria</td>
                 <td>@o.Salario.ToString("C")</td>
@@ -31,3 +60,71 @@
         }
     </tbody>
 </table>
+
+@if (ViewBag.TotalPaginas > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+            {
+                <li class="page-item @(i == ViewBag.PaginaActual ? "active" : "")">
+                    <a class="page-link" href="?pagina=@i&buscar=@ViewBag.Buscar&ubicacion=@ViewBag.Ubicacion">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+@if (User.IsInRole("Postulante"))
+{
+    <div class="fixed-bottom bg-light p-3 border-top text-end shadow" style="z-index: 1000;">
+        <span class="me-3 fw-bold">Seleccionadas: <span id="contadorSeleccionadas">0</span></span>
+        <button id="btnPostularMasivo" class="btn btn-success" disabled>Postularme a Seleccionadas</button>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let seleccionadas = [];
+
+            $(".oferta-checkbox").change(function () {
+                let id = parseInt($(this).val());
+                if ($(this).is(":checked")) {
+                    seleccionadas.push(id);
+                } else {
+                    seleccionadas = seleccionadas.filter(x => x !== id);
+                }
+                
+                $("#contadorSeleccionadas").text(seleccionadas.length);
+                $("#btnPostularMasivo").prop("disabled", seleccionadas.length === 0);
+            });
+
+            $("#btnPostularMasivo").click(function () {
+                if (seleccionadas.length === 0) return;
+
+                $(this).prop("disabled", true).text("Procesando...");
+
+                $.ajax({
+                    url: "/Ofertas/PostulacionMasiva",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(seleccionadas),
+                    success: function (res) {
+                        if (res.success) {
+                            alert(res.message);
+                            window.location.reload();
+                        } else {
+                            alert("Error: " + res.message);
+                            $("#btnPostularMasivo").prop("disabled", false).text("Postularme a Seleccionadas");
+                        }
+                    },
+                    error: function () {
+                        alert("Ocurrió un error en la solicitud AJAX.");
+                        $("#btnPostularMasivo").prop("disabled", false).text("Postularme a Seleccionadas");
+                    }
+                });
+            });
+        });
+    </script>
+}

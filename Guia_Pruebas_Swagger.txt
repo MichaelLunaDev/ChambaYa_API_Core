@@ -1,0 +1,103 @@
+==================================================
+GUÍA DE PRUEBAS PARA SWAGGER (ChambaYa_API 1.0)
+==================================================
+Instrucciones: Haz clic en "Try it out" en cada endpoint y usa los siguientes datos de prueba.
+
+--- 1. CONSULTAS GENERALES ---
+GET /api/Chamba/Ofertas
+- Qué hace: Lista todas las ofertas activas.
+- Datos: No requiere parámetros. Solo haz clic en "Execute".
+
+GET /api/Chamba/Categorias
+- Qué hace: Lista las categorías disponibles.
+- Datos: No requiere parámetros.
+
+--- 2. AUTENTICACIÓN Y USUARIOS ---
+POST /api/Chamba/Registro
+- Qué hace: Registra un nuevo usuario en el sistema.
+- JSON de prueba:
+{
+  "nombres": "Juan Perez",
+  "email": "juan.perez@email.com",
+  "clave": "123456",
+  "idRol": 2
+}
+*(Nota: idRol 1 = Administrador, idRol 2 = Postulante)*
+
+POST /api/Chamba/Login
+- Qué hace: Valida las credenciales de un usuario.
+- JSON de prueba:
+{
+  "email": "admin@chambaya.com",
+  "clave": "123456"
+}
+
+--- 3. FLUJO DEL POSTULANTE (TRABAJADOR) ---
+POST /api/Chamba/ProcesarCarrito
+- Qué hace: Simula el "carrito" postulando a múltiples ofertas a la vez.
+- JSON de prueba:
+{
+  "idUsuario": 2,
+  "ofertasIds": "1,3,5"
+}
+
+GET /api/Chamba/MisPostulaciones/{idUsuario}
+- Qué hace: Muestra el historial y estado de postulaciones de un trabajador.
+- Parámetro idUsuario: 2
+
+--- 4. FLUJO DEL ADMINISTRADOR (RECLUTADOR) ---
+POST /api/Chamba/CrearOferta
+- Qué hace: Publica una nueva oferta laboral.
+- JSON de prueba:
+{
+  "idCategoria": 1,
+  "idUsuario": 1,
+  "titulo": "Cajero part-time",
+  "descripcion": "Atención al cliente en caja.",
+  "salario": 1025.50,
+  "ubicacion": "Lima",
+  "modalidad": "Presencial",
+  "requisitos": "Secundaria completa, experiencia de 6 meses."
+}
+
+GET /api/Chamba/MisOfertasAdmin/{idUsuario}
+- Qué hace: Trae todas las publicaciones que ha creado un administrador específico.
+- Parámetro idUsuario: 1
+
+GET /api/Chamba/Candidatos/{idOferta}
+- Qué hace: Lista todas las personas que postularon a una oferta específica.
+- Parámetro idOferta: 1
+
+POST /api/Chamba/EvaluarCandidato
+- Qué hace: Aprueba o rechaza a un candidato y le deja un mensaje.
+- JSON de prueba:
+{
+  "idDetalle": 1,
+  "estado": "Aprobado",
+  "mensaje": "Cumples con el perfil, te contactaremos pronto."
+}
+*(Estados válidos: "Aprobado" o "Rechazado")*
+
+--- 5. CRUD DE OFERTAS (EDICIÓN Y ELIMINACIÓN) ---
+GET /api/Chamba/Oferta/{id}
+- Qué hace: Obtiene los detalles de una oferta por su ID para llenar el formulario de edición.
+- Parámetro id: 1
+
+PUT /api/Chamba/Oferta
+- Qué hace: Actualiza los datos de una oferta existente.
+- JSON de prueba:
+{
+  "idOferta": 1,
+  "idCategoria": 2,
+  "titulo": "Cajero part-time (Sueldo Actualizado)",
+  "descripcion": "Atención al cliente.",
+  "salario": 1200.00,
+  "ubicacion": "Arequipa",
+  "modalidad": "Híbrido",
+  "requisitos": "Secundaria completa."
+}
+
+DELETE /api/Chamba/Oferta/{id}
+- Qué hace: Desactiva (elimina lógicamente) una oferta para que ya no aparezca.
+- Parámetro id: 1
+

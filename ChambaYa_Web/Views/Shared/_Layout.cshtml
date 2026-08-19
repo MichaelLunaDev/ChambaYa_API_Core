@@ -29,15 +29,36 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Explorar Ofertas</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="MisPostulaciones">Mis Postulaciones</a>
-                        </li>
+                        @if (User.IsInRole("Postulante"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="MisPostulaciones">Mis Postulaciones</a>
+                            </li>
+                        }
                     </ul>
                     <div class="d-flex align-items-center gap-3">
-                        <a class="nav-link fw-semibold text-slate-600 d-none d-lg-block" href="#">Entrar</a>
-                        <a class="btn-primary-modern text-decoration-none" asp-controller="Oferta" asp-action="Crear">
-                            Publicar gratis
-                        </a>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <span class="nav-link fw-semibold text-slate-600 d-none d-lg-block">Hola, @User.Identity.Name</span>
+                            <a class="nav-link text-danger fw-semibold d-none d-lg-block" asp-controller="Auth" asp-action="Logout">Cerrar Sesión</a>
+
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <a class="nav-link text-decoration-none me-3" asp-controller="Oferta" asp-action="Publicaciones">
+                                    Publicaciones
+                                </a>
+                                <a class="nav-link text-decoration-none me-3" asp-controller="Oferta" asp-action="Revisiones">
+                                    Revisiones
+                                </a>
+                                <a class="btn-primary-modern text-decoration-none" asp-controller="Oferta" asp-action="Crear">
+                                    Publicar gratis
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a class="nav-link fw-semibold text-slate-600 d-none d-lg-block" asp-controller="Auth" asp-action="Login">Entrar</a>
+                        }
                     </div>
                 </div>
             </div>
@@ -73,10 +94,10 @@
                 <div class="col-6 col-lg-2">
                     <h6>Categorías</h6>
                     <ul class="list-unstyled small">
-                        <li><a href="#">Tecnología</a></li>
-                        <li><a href="#">Diseño y Creatividad</a></li>
-                        <li><a href="#">Ventas</a></li>
-                        <li><a href="#">Soporte</a></li>
+                        <li><a href="/?cat=1">Tecnología</a></li>
+                        <li><a href="/?cat=4">Diseño y Creatividad</a></li>
+                        <li><a href="/?cat=2">Ventas</a></li>
+                        <li><a href="/?cat=3">Soporte</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3">
@@ -105,7 +126,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>window.ChambaYaApiBase = '@_config["ApiBaseUrl"]';</script>
+    <script>
+        window.ChambaYaApiBase = '@_config["ApiBaseUrl"]';
+        window.ChambaYaUsuarioId = @(User.Identity != null && User.Identity.IsAuthenticated ? User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "null" : "null");
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

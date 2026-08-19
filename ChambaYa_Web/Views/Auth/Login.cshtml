@@ -1,0 +1,55 @@
+@model ChambaYa_Web.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="row justify-content-center my-5 animar-entrada">
+    <div class="col-md-5">
+        <div class="form-panel">
+            <div class="form-header p-4 text-center">
+                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow-sm" style="width:56px;height:56px;font-size:1.5rem;">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-0">¡Bienvenido de vuelta!</h4>
+                <p class="text-slate-500 small mt-1">Ingresa a tu cuenta para continuar</p>
+            </div>
+            
+            <div class="p-4 p-md-5">
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
+                        <div>@ViewBag.Error</div>
+                    </div>
+                }
+                
+                @if (ViewBag.Exito != null)
+                {
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <i class="bi bi-check-circle-fill flex-shrink-0 me-2"></i>
+                        <div>@ViewBag.Exito</div>
+                    </div>
+                }
+
+                <form asp-action="Login" method="post">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="nombre@ejemplo.com" required>
+                        <label for="Email">Correo Electrónico</label>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input asp-for="Clave" type="password" class="form-control" id="Clave" placeholder="Contraseña" required>
+                        <label for="Clave">Contraseña</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-modern w-100 py-3 mb-4">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Ingresar
+                    </button>
+                    
+                    <div class="text-center text-slate-500">
+                        ¿No tienes una cuenta? <a asp-action="Registro" class="text-indigo-600 fw-bold text-decoration-none">Regístrate aquí</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
