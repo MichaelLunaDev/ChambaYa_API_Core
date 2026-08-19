@@ -274,6 +274,20 @@
     const postular = async () => {
         if (seleccionadas.size === 0) return;
 
+        if (!ChambaYa.usuarioId) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Inicia sesión',
+                text: 'Debes iniciar sesión para poder postular a estas ofertas.',
+                confirmButtonText: 'Ir a Login',
+                customClass: { confirmButton: 'btn btn-primary-modern rounded-pill px-4' },
+                buttonsStyling: false
+            }).then(() => {
+                window.location.href = '/Auth/Login';
+            });
+            return;
+        }
+
         const ofertasSeleccionadas = ofertas.filter(o => seleccionadas.has(o.idOferta));
         const resumen = ofertasSeleccionadas.map(o => `<li class="mb-1 text-slate-700">${escapeHtml(o.titulo)}</li>`).join('');
 
@@ -329,6 +343,10 @@
         }
     };
 
+    if (btnCarrito) {
+        btnCarrito.addEventListener('click', postular);
+    }
+
     contenedor.addEventListener('click', (e) => {
         const btn = e.target.closest('.btn-seleccionar');
         if (btn) toggleSeleccion(parseInt(btn.dataset.id, 10));
@@ -359,6 +377,11 @@
                     html += `<option value="${c.idCategoria}">${escapeHtml(c.nombreCategoria)}</option>`;
                 });
                 selectCategoria.innerHTML = html;
+                const params = new URLSearchParams(window.location.search);
+                if(params.has('cat')) {
+                    selectCategoria.value = params.get('cat');
+                    setTimeout(aplicarFiltrosYOrdenamiento, 100); 
+                }
             }
         } catch(e) {
             console.error('Error cargando categorías', e);
@@ -387,3 +410,4 @@
     cargarCategorias();
     cargarOfertas();
 })();
+

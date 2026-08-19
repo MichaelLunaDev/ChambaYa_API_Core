@@ -9,6 +9,7 @@ namespace ChambaYa_Web.Controllers
             return View();
         }
 
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Postulante")]
         public IActionResult MisPostulaciones()
         {
             return View();

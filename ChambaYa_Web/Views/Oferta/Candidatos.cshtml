@@ -1,0 +1,117 @@
+@{
+    ViewData["Title"] = "Revisar Candidatos";
+}
+
+<div class="container py-5 my-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Candidatos</h2>
+            <p class="text-slate-500 mb-0">Revisa y evalúa las postulaciones recibidas.</p>
+        </div>
+        <a asp-action="Revisiones" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="px-4 py-3 text-slate-500">Candidato</th>
+                        <th class="py-3 text-slate-500">Correo</th>
+                        <th class="py-3 text-slate-500">Fecha</th>
+                        <th class="py-3 text-slate-500">Estado</th>
+                        <th class="px-4 py-3 text-slate-500 text-end">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCandidatos">
+                    <tr><td colspan="5" class="text-center py-5">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const idOferta = @ViewBag.IdOferta;
+
+        async function cargarCandidatos() {
+            const tbody = document.getElementById("tablaCandidatos");
+            try {
+                const res = await fetch(`${ChambaYa.apiBase}/Candidatos/${idOferta}`);
+                const data = await res.json();
+                
+                if(data.success && data.data && data.data.length > 0) {
+                    let html = "";
+                    data.data.forEach(c => {
+                        let bgBadge = "bg-warning text-dark";
+                        if(c.estado === "Aprobado") bgBadge = "bg-success text-white";
+                        if(c.estado === "Rechazado") bgBadge = "bg-danger text-white";
+                        
+                        html += `<tr>
+                            <td class="px-4 py-3 fw-medium text-slate-900">${c.nombres}</td>
+                            <td class="py-3 text-slate-500">${c.email}</td>
+                            <td class="py-3 text-slate-500">${new Date(c.fechaPostulacion).toLocaleDateString()}</td>
+                            <td class="py-3"><span class="badge ${bgBadge} rounded-pill">${c.estado}</span></td>
+                            <td class="px-4 py-3 text-end">
+                                <button class="btn btn-sm btn-primary-modern rounded-pill px-3" onclick="evaluar(${c.idDetalle}, '${c.nombres}')">
+                                    Evaluar
+                                </button>
+                            </td>
+                        </tr>`;
+                    });
+                    tbody.innerHTML = html;
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-slate-500">Nadie ha postulado a esta oferta aún.</td></tr>`;
+                }
+            } catch(e) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-danger">Error al cargar datos.</td></tr>`;
+            }
+        }
+
+        async function evaluar(idDetalle, nombre) {
+            let mensajeTxt = "";
+            Swal.fire({
+                title: `Evaluar a ${nombre}`,
+                html: '<div class="text-start"><label class="form-label text-slate-500">Mensaje para el postulante (opcional)</label><textarea id="swal-mensaje" class="form-control" rows="4" placeholder="Ej. Nos encanta tu perfil..."></textarea></div>',
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonText: 'Aprobar Candidato',
+                denyButtonText: 'Rechazar Candidato',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    confirmButton: 'btn btn-success px-3 ms-2 mb-2',
+                    denyButton: 'btn btn-danger px-3 ms-2 mb-2',
+                    cancelButton: 'btn btn-secondary px-3 mb-2'
+                },
+                buttonsStyling: false,
+                preConfirm: () => { mensajeTxt = document.getElementById('swal-mensaje').value; },
+                preDeny: () => { mensajeTxt = document.getElementById('swal-mensaje').value; }
+            }).then(async (result) => {
+                if (result.isConfirmed || result.isDenied) {
+                    const estado = result.isConfirmed ? "Aprobado" : "Rechazado";
+                    try {
+                        const res = await fetch(`${ChambaYa.apiBase}/EvaluarCandidato`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ idDetalle, estado, mensaje: mensajeTxt })
+                        });
+                        const data = await res.json();
+                        if(data.success) {
+                            Swal.fire('Guardado!', 'La evaluación ha sido enviada al postulante.', 'success');
+                            cargarCandidatos();
+                        } else {
+                            Swal.fire('Error', 'No se pudo guardar la evaluación', 'error');
+                        }
+                    } catch(e) {
+                        Swal.fire('Error', 'Problemas de red.', 'error');
+                    }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarCandidatos);
+    </script>
+}

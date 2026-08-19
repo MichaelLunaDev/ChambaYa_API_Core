@@ -2,50 +2,74 @@
     ViewData["Title"] = "Encuentra Trabajo";
 }
 
-<section class="hero-section">
-    <div class="container">
-        <div class="badge-soft mb-3">
-            <i class="bi bi-stars"></i> La nueva forma de trabajar
+<section class="hero-section position-relative overflow-hidden mb-0 pb-5" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);">
+    <div class="position-absolute rounded-circle" style="width: 600px; height: 600px; background: radial-gradient(circle, rgba(99,102,241,0.05) 0%, rgba(255,255,255,0) 70%); top: -200px; left: -200px; z-index: 0;"></div>
+    <div class="position-absolute rounded-circle" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(219,39,119,0.05) 0%, rgba(255,255,255,0) 70%); bottom: 0; right: -100px; z-index: 0;"></div>
+
+    <div class="container position-relative text-center" style="z-index: 1;">
+        <div class="badge-soft mb-3 shadow-sm border-0 bg-white mx-auto">
+            <i class="bi bi-stars text-warning"></i> Chamba rápida y segura
         </div>
         
-        <h1 class="hero-title">
-            Tu próxima chamba,<br class="d-none d-md-block" />
-            <span class="text-gradient">a un clic de distancia</span>
+        <h1 class="hero-title" style="letter-spacing: -0.03em;">
+            Encuentra tu próxima <span class="text-gradient">chamba</span><br class="d-none d-md-block" />
+            al toque y sin rodeos
         </h1>
         
-        <p class="hero-subtitle">
-            Explora cientos de oportunidades laborales temporales. Sin intermediarios, sin complicaciones. Postúlate hoy mismo y empieza a generar ingresos.
+        <p class="hero-subtitle text-secondary fs-5 mx-auto" style="max-width: 700px;">
+            Olvida el papeleo aburrido. Postula a cientos de cachuelos y empleos temporales desde tu celular. ¡Tira dedo a las mejores ofertas y arranca a facturar!
         </p>
 
-        <form class="search-glass mb-5" onsubmit="event.preventDefault(); document.getElementById('contenedorOfertas').scrollIntoView({behavior: 'smooth', block: 'start'})">
-            <i class="bi bi-search ms-3 text-slate-400 fs-5 d-none d-lg-block"></i>
-            <input type="text" id="buscarOferta" class="form-control" placeholder="Cargo, empresa o habilidad..." aria-label="Buscar oferta" />
-            <div class="vr-divider"></div>
-            <div class="vr-divider d-none d-md-block"></div>
-            <select id="filtroCategoria" class="form-select w-auto" aria-label="Filtrar por categoría">
-                <option value="">Todas las categorías</option>
-            </select>
-            <div class="vr-divider d-none d-md-block"></div>
-            <select id="filtroModalidad" class="form-select w-auto" aria-label="Filtrar por modalidad">
-                <option value="">Cualquier modalidad</option>
-                <option value="Presencial">Presencial</option>
-                <option value="Remoto">Remoto</option>
-                <option value="Híbrido">Híbrido</option>
-                <option value="Medio tiempo">Medio tiempo</option>
-                <option value="Tiempo completo">Tiempo completo</option>
-            </select>
-            <div class="vr-divider d-none d-md-block"></div>
-            <input type="number" id="filtroSalario" class="form-control w-auto" placeholder="Salario mín." aria-label="Salario mínimo" style="max-width: 130px;" />
-            <button type="submit" class="btn-primary-modern ms-lg-2" style="min-width:100px;">Buscar</button>
-        </form>
+        <div class="row justify-content-center mt-5 text-center g-4">
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold text-slate-900 mb-0">+50k</h3>
+                <p class="text-slate-500 small">Chamberos activos</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold text-slate-900 mb-0">+100k</h3>
+                <p class="text-slate-500 small">Ofertas publicadas</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold text-slate-900 mb-0">99%</h3>
+                <p class="text-slate-500 small">Efectividad</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h3 class="fw-bold text-slate-900 mb-0">24h</h3>
+                <p class="text-slate-500 small">Para contratar</p>
+            </div>
+        </div>
     </div>
 </section>
 
-<div class="container">
+<div class="container mb-5" style="margin-top: -20px; position: relative; z-index: 10;">
+    <form class="search-glass mx-auto w-100" onsubmit="event.preventDefault(); document.getElementById('contenedorOfertas').scrollIntoView({behavior: 'smooth', block: 'start'})" style="max-width: 900px;">
+        <i class="bi bi-search ms-3 text-slate-400 fs-5 d-none d-lg-block"></i>
+        <input type="text" id="buscarOferta" class="form-control" placeholder="Ej. Ventas, sistemas, cajero..." aria-label="Buscar oferta" />
+        <div class="vr-divider"></div>
+        <div class="vr-divider d-none d-md-block"></div>
+        <select id="filtroCategoria" class="form-select w-auto" aria-label="Filtrar por categoría">
+            <option value="">Todas las categorías</option>
+        </select>
+        <div class="vr-divider d-none d-md-block"></div>
+        <select id="filtroModalidad" class="form-select w-auto" aria-label="Filtrar por modalidad">
+            <option value="">Todas las modalidades</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Remoto">Remoto</option>
+            <option value="Híbrido">Híbrido</option>
+            <option value="Medio tiempo">Medio tiempo</option>
+            <option value="Tiempo completo">Tiempo completo</option>
+        </select>
+        <div class="vr-divider d-none d-md-block"></div>
+        <input type="number" id="filtroSalario" class="form-control w-auto" placeholder="S/ mín." aria-label="Salario mínimo" style="max-width: 100px;" />
+        <button type="submit" class="btn-primary-modern ms-lg-2" style="min-width:100px;">Buscar</button>
+    </form>
+</div>
+
+<div class="container pb-5">
     <div class="d-flex flex-wrap align-items-end justify-content-between mb-4 gap-3">
         <div>
-            <h3 class="fw-bold mb-1">Ofertas disponibles</h3>
-            <p class="text-slate-500 small mb-0">Resultados de búsqueda y filtros combinados</p>
+            <h3 class="fw-bold mb-1">Chambas disponibles</h3>
+            <p class="text-slate-500 small mb-0">Encuentra la oportunidad ideal para ti</p>
         </div>
         <div class="d-flex align-items-center gap-3">
             <select id="ordenamientoOfertas" class="form-select form-select-sm" style="width: auto;">
@@ -64,7 +88,7 @@
                 </button>
             </div>
             
-            <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-2 border" id="contadorOfertas">
+            <span class="badge bg-dark text-white rounded-pill px-3 py-2 shadow-sm" id="contadorOfertas">
                 Cargando...
             </span>
         </div>
@@ -122,11 +146,14 @@
     <tbody></tbody>
 </table>
 
-<button type="button" id="btnCarritoFlotante" class="chamba-carrito-flotante">
-    <span class="contador-badge" id="contadorCarrito">0</span>
-    <span>Postular a selección</span>
-    <i class="bi bi-arrow-right"></i>
-</button>
+@if (!User.IsInRole("Administrador"))
+{
+    <button type="button" id="btnCarritoFlotante" class="chamba-carrito-flotante">
+        <span class="contador-badge" id="contadorCarrito">0</span>
+        <span>Postular a selección</span>
+        <i class="bi bi-arrow-right"></i>
+    </button>
+}
 
 @section Scripts {
     <script src="~/js/ofertas.js" asp-append-version="true"></script>

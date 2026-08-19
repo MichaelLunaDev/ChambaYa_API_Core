@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "Revisiones";
+}
+
+<div class="container py-5 my-3">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Revisiones</h2>
+            <p class="text-slate-500 mb-0">Revisa los candidatos de tus ofertas publicadas.</p>
+        </div>
+    </div>
+
+    <div class="row" id="contenedorOfertas">
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-slate-500">Cargando...</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const userId = window.ChambaYaUsuarioId;
+            const contenedor = document.getElementById("contenedorOfertas");
+            
+            if(!userId) return;
+
+            try {
+                const response = await fetch(`${ChambaYa.apiBase}/MisOfertasAdmin/${userId}`);
+                const data = await response.json();
+
+                if(data.success && data.data && data.data.length > 0) {
+                    let html = "";
+                    data.data.forEach(o => {
+                        html += `<div class="col-md-6 mb-4">
+                            <div class="modern-card h-100 border-start border-4 border-indigo">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="fw-bold mb-1">${o.titulo}</h5>
+                                        <p class="text-slate-500 small"><i class="bi bi-calendar-event me-1"></i> Publicado: ${new Date(o.fechaPublicacion).toLocaleDateString()}</p>
+                                    </div>
+                                    <span class="badge ${o.activa ? 'bg-success' : 'bg-secondary'} rounded-pill">
+                                        ${o.activa ? 'Activa' : 'Inactiva'}
+                                    </span>
+                                </div>
+                                <hr/>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="text-slate-700">
+                                        <i class="bi bi-people-fill text-indigo-600 me-2"></i>
+                                        <strong>${o.totalPostulantes}</strong> Postulantes
+                                    </div>
+                                    <a href="/Oferta/Candidatos/${o.idOferta}" class="btn btn-outline-primary rounded-pill btn-sm px-3">
+                                        Revisar Candidatos
+                                    </a>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                    contenedor.innerHTML = html;
+                } else {
+                    contenedor.innerHTML = `<div class="col-12 text-center py-5">
+                        <i class="bi bi-inbox display-1 text-slate-300"></i>
+                        <h4 class="text-slate-900 mt-3">No tienes ofertas publicadas</h4>
+                        <p class="text-slate-500">Empieza creando tu primera oferta de empleo.</p>
+                    </div>`;
+                }
+            } catch(e) {
+                console.error(e);
+                contenedor.innerHTML = `<div class="col-12 text-center text-danger py-5"><i class="bi bi-exclamation-triangle"></i> Error al cargar tus ofertas.</div>`;
+            }
+        });
+    </script>
+}
