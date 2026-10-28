@@ -74,3 +74,5 @@
 **Desarrollo de Servicios Web I | CIBERTEC 2026**
 
 </div>
+
+Proyecto finalizado 
